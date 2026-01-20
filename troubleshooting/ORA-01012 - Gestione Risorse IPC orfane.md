@@ -7,7 +7,7 @@
 
 ## Sommario
 
-Durante operazioni di clonazione e configurazione di un ambiente Oracle Data Guard 11.2.0.4, si è manifestato un errore ORA-01012: not logged on durante tentativi di connessione sqlplus / as sysdba. L'analisi ha rivelato la presenza di risorse IPC (Inter-Process Communication) orfane associate a un ORACLE_SID precedentemente utilizzato, non completamente pulite dal kernel del sistema operativo. 
+Durante operazioni di clonazione e configurazione di un ambiente Oracle Data Guard 11.2.0.4, si è manifestato un errore ORA-01012: not logged on durante tentativi di connessione sqlplus / as sysdba. L'analisi ha rivelato la presenza di risorse IPC (Inter-Process Communication) orfane associate a un ORACLE_SID precedentemente utilizzato, non completamente pulite dal kernel del sistema operativo.
 
 ## Sintomi e riconoscimento del problema
 

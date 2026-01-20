@@ -13,6 +13,7 @@ Key Learning: Eseguire sempre runInstaller -detachHome prima di rm -rf della dir
 ## Procedura
 
 ### Step 1: Identificare l'Oracle Home da Rimuovere
+
 ```bash
 # Lista tutti gli Oracle Home installati
 grep "HOME NAME" $INVENTORY_LOCATION/ContentsXML/inventory.xml | grep db
@@ -21,6 +22,7 @@ grep "HOME NAME" $INVENTORY_LOCATION/ContentsXML/inventory.xml | grep db
 # <HOME NAME="OraDB18Home1" LOC="/u01/oracle/product/18c/db_1" TYPE="O" IDX="12"/>
 # <HOME NAME="OraDB19Home1" LOC="/u01/oracle/product/19c/db_1" TYPE="O" IDX="13"/>
 ```
+
 Prendi nota di:
 
 NAME (es: OraDB18Home1)
@@ -28,12 +30,14 @@ NAME (es: OraDB18Home1)
 LOC (es: /u01/oracle/product/18c/db_1)
 
 ### Step 2: Eseguire detachHome (CRITICO - Prima della Cancellazione)
+
 ```bash
 # Usa runInstaller da un Oracle Home ATTIVO (es: 19c)
 $ORACLE_HOME/oui/bin/runInstaller -silent -detachHome \
   ORACLE_HOME="/u01/oracle/product/18c/db_1" \
   ORACLE_HOME_NAME="OraDB18Home1"
 ```
+
 Output atteso:
 
 ```text
@@ -45,31 +49,39 @@ You can find the log of this install session at:
 'DETACHHOME' WAS SUCCESSFUL.
 Verifica che sia stato rimosso:
 ```
+
 ```bash
 grep "OraDB18Home1" $INVENTORY_LOCATION/ContentsXML/inventory.xml
 # NON dovrebbe mostrare nulla
 ```
+
 ### Step 3: Rimuovere Fisicamente la Directory Oracle Home
+
 OPPURE
 
 #### Opzione 3a: Rimuovi la directory (se non hai bisogno di conservare dati)
+
 Usa la directory specificata nel passo 1.
 
 ```bash
 cd /u01/oracle/product
 rm -rf 18c/db_1
 ```
+
 Esempio di verifica:
 
 ```bash
 ls -ld 18c/db_1
 # ls: cannot access '18c/db_1': No such file or directory
 ```
+
 #### Opzione 3b: Sposta/Rinomina la directory (se vuoi conservarla temporaneamente)
+
 ```bash
 cd /u01/oracle/product
 mv 18c/db_1 18c/db_1_old_$(date +%Y%m%d)
 ```
+
 Step 4: Pulire Directory Residue (se detachHome le ha ricreate)
 In alcuni casi, runInstaller ricrea una directory minima:
 

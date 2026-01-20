@@ -11,8 +11,8 @@ Durante operazioni di clonazione e configurazione di un ambiente Oracle Data Gua
 
 ## Sintomi e riconoscimento del problema
 
-
 2.1 Comportamento Anomalo di SQL*Plus
+
 ```bash
 # Comando eseguito:
 export ORACLE_SID=LCMARPP
@@ -31,11 +31,13 @@ SQL> show parameter name
 ```
 
 ### 2.2 Output Differenziato di Connessione
+
 Con ORACLE_SID problematico (LCMARPP): Connected. → ORA-01012
 
 Con ORACLE_SID funzionante (LCMARPP_STB): Connected to an idle instance. → Comandi SQL funzionanti
 
 ### 2.3 Stato Processi IPC
+
 ```bash
 # Output sysresv per SID problematico:
 sysresv -l LCMARPP
@@ -46,9 +48,11 @@ Oracle Instance not alive for sid "LCMARPP"
 ## Analisi
 
 ### 3.1 Causa Primaria: Risorse IPC Orfane
+
 Quando un'istanza Oracle viene arrestata in modo non pulito (shutdown abort, kill -9, crash del server), i segmenti di memoria condivisa e i semafori possono rimanere allocati nel kernel anche senza processi Oracle attivi. Queste risorse vengono chiamate "orfane".
 
 ### 3.2 Meccanismo di Handshake di SQL*Plus
+
 Quando si esegue sqlplus / as sysdba, prima di leggere l'spfile, Oracle esegue:
 
 Lookup del segmento IPC basato su ORACLE_SID
@@ -60,11 +64,13 @@ Se trova segmenti IPC senza processi: Handshake parzialmente riuscito → Connec
 Al primo comando SQL: Fallimento con ORA-01012 perché i processi reali non esistono
 
 ### 3.3 Differenza con Connessione Corretta
+
 Con ORACLE_SID="LCMARPP_STB", i segmenti IPC sono coerenti con i processi attivi, quindi l'handshake completa correttamente e mostra Connected to an idle instance.
 
 ## 4. Risoluzione
 
 ### 4.1 Verifica Stato Attuale
+
 ```bash
 # Controlla tutti i segmenti IPC Oracle
 ipcs -m | grep oracle
@@ -83,7 +89,9 @@ ls -l $ORACLE_HOME/dbs/lk*
 ```
 
 ### 4.2 Identificazione Risorse Orfane
+
 Risorse sono orfane quando:
+
 ```bash
 sysresv -l <SID> mostra segmenti IPC
 
@@ -91,12 +99,15 @@ Oracle Instance not alive for sid "<SID>"
 
 ps -ef | grep pmon | grep <SID> NON mostra processi
 ```
+
 ### 4.3 Rimozione Risorse IPC Orfane
+
 Metodo Oracle (raccomandato):
 
 ``` bash
 sysresv -f -l LCMARPP
 ```
+
 Metodo Manuale (se sysresv non disponibile):
 
 ```bash
@@ -104,13 +115,16 @@ Metodo Manuale (se sysresv non disponibile):
 ipcrm -m <shared_memory_id>
 ipcrm -s <semaphore_id>
 ```
+
 Rimozione file lock residui:
 
 ```bash
 cd $ORACLE_HOME/dbs
 rm -f lkLCMARPP sgadefLCMARPP.dbf mpool_LCMARPP
 ```
+
 ### 4.4 Verifica Pulizia
+
 ```bash
 # Dovrebbe mostrare nessuna risorsa per SID pulito
 sysresv -l LCMARPP
@@ -118,7 +132,9 @@ sysresv -l LCMARPP
 # Dovrebbe mostrare solo risorse per SID attivo
 sysresv -l LCMARPP_STB
 ```
+
 ### 4.5 Avvio Istanza Pulita
+
 ```bash
 export ORACLE_SID=LCMARPP
 sqlplus / as sysdba

@@ -16,5 +16,5 @@ SELECT
     virtual_column,
     data_default
 FROM dba_tab_cols
-WHERE table_name = '<nome_tabella>'
-AND column_name IN ('<nome_colonna>');
+WHERE table_name = 'nome_tabella'
+AND column_name IN ('nome_colonna');

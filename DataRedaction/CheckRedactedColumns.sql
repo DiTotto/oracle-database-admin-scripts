@@ -10,5 +10,5 @@ SELECT
 FROM 
     REDACTION_COLUMNS 
 WHERE 
-    object_owner = '<nome_schema>' 
-    AND object_name = '<nome_tabella>';
+    object_owner = 'nome_schema' 
+    AND object_name = 'nome_tabella';

@@ -1,0 +1,1 @@
+select tablespace_name, file_name, bytes/1024/1024, status from dba_temp_files;

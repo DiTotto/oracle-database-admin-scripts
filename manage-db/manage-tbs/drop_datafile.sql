@@ -1,0 +1,1 @@
+alter tablespace tbs2 drop datafile '/disk2/prod1/data/data02.dbf';

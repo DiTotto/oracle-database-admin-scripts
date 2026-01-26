@@ -1,0 +1,1 @@
+alter database tempfile '/disk2/prod1/data/temp01.dbf' resize 30m;

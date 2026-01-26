@@ -1,0 +1,1 @@
+alter database datafile '/disk2/prod1/data/data01.dbf' resize 10m;

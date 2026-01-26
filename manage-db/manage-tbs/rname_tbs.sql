@@ -1,0 +1,1 @@
+alter tablespace tbs1 rename to tbs2;

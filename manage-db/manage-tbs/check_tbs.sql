@@ -1,0 +1,1 @@
+select tablespace_name, contents, status from dba_tablespaces;

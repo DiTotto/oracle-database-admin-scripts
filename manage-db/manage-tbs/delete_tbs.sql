@@ -1,0 +1,1 @@
+drop tablespace tbs1 including contents and datafiles;

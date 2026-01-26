@@ -1,0 +1,1 @@
+alter tablespace tbs1 add datafile '/disk2/prod1/data/data02.dbf' size 20m;

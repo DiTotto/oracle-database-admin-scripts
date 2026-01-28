@@ -8,3 +8,14 @@ BEGIN
     );
 END;
 /
+
+BEGIN
+    DBMS_REDACT.ALTER_POLICY(
+        object_schema => 'DWHASL',
+        object_name   => 'TAB_ASSISTITI_CRONICI_TEST',
+        policy_name   => 'tab_ass_cronici_overall_dwhasl_policy',
+        action        => DBMS_REDACT.DROP_COLUMN,
+        column_name   => 'COD_PAZIENTE'
+    );
+END;
+/
